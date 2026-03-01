@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Definición del Esquema (Estructura de tus datos)
 const ScoreSchema = new mongoose.Schema({
     nombre: String,
     facultad: String,
@@ -8,23 +7,17 @@ const ScoreSchema = new mongoose.Schema({
     fecha: { type: Date, default: Date.now }
 });
 
-// Evita errores de re-declaración del modelo en Netlify
 const Score = mongoose.models.Score || mongoose.model('Score', ScoreSchema);
 
 exports.handler = async (event, context) => {
-    // Forzamos a que la función no espere a que el loop de eventos esté vacío
     context.callbackWaitsForEmptyEventLoop = false;
 
     try {
-        // Conexión a MongoDB usando la variable de entorno de Netlify
         if (mongoose.connection.readyState !== 1) {
-            await mongoose.connect(process.env.MONGO_URI, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            });
+            // El .trim() destruye espacios o saltos de línea invisibles en tu variable
+            await mongoose.connect(process.env.MONGO_URI.trim());
         }
 
-        // CASO 1: GUARDAR PUNTAJE (POST)
         if (event.httpMethod === 'POST') {
             const data = JSON.parse(event.body);
             const newScore = new Score({
@@ -40,13 +33,8 @@ exports.handler = async (event, context) => {
             };
         }
 
-        // CASO 2: OBTENER EL TOP 5 (GET)
         if (event.httpMethod === 'GET') {
-            // Buscamos los 5 mejores puntajes, del más alto al más bajo
-            const topScores = await Score.find()
-                .sort({ puntos: -1, fecha: 1 })
-                .limit(5);
-            
+            const topScores = await Score.find().sort({ puntos: -1, fecha: 1 }).limit(5);
             return {
                 statusCode: 200,
                 body: JSON.stringify(topScores),
@@ -57,7 +45,7 @@ exports.handler = async (event, context) => {
         return { statusCode: 405, body: "Método no permitido" };
 
     } catch (error) {
-        console.error("Error en la función score:", error);
+        console.error("Error en score.js:", error);
         return {
             statusCode: 500,
             body: JSON.stringify({ error: error.message }),
