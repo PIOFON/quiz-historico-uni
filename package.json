@@ -1,17 +1,17 @@
 {
   "name": "web-c",
   "version": "1.0.0",
-  "description": "",
+  "description": "Quiz Histórico UNI",
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "dotenv": "^17.3.1",
-    "mongoose": "^9.2.3"
-  }
+    "mongoose": "^8.0.0",
+    "dotenv": "^16.0.0"
+  },
+  "keywords": [],
+  "author": "Fernando Rojas",
+  "license": "ISC",
+  "type": "commonjs"
 }
