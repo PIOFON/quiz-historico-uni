@@ -1,0 +1,9 @@
+# Archivo de variables de entorno (Contiene tu contraseña de MongoDB)
+.env
+
+# Carpeta de librerías de Node.js (Es muy pesada y no se sube a GitHub)
+node_modules/
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db

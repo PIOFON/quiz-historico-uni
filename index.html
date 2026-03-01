@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Histórico - UNI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="contenedor-principal">
+        <header class="cabecera">
+            <h1>Jornada Conmemorativa</h1>
+            <p>Héroes de la Insurrección: José Jackson Jácamo</p>
+        </header>
+
+        <div id="pantalla-inicio" class="pantalla">
+            <h2>Registro de Participante</h2>
+            <div class="grupo-formulario">
+                <input type="text" id="nombre" placeholder="Ingresa tu nombre completo">
+            </div>
+            <div class="grupo-formulario">
+                <select id="facultad">
+                    <option value="" disabled selected>Selecciona tu facultad UNI</option>
+                    <option value="DACTIC">DACTIC</option>
+                    <option value="DACA">DACA</option>
+                    <option value="DACIP">DACIP</option>
+                    <option value="DACAC">DACAC</option>
+                </select>
+            </div>
+            <button id="btn-empezar" class="btn-rojo">Comenzar Quiz</button>
+        </div>
+
+        <div id="pantalla-quiz" class="pantalla oculta">
+            <div class="contenedor-barra">
+                <div id="barra-llenado" class="barra-llenado"></div>
+            </div>
+            
+            <div class="estado-quiz">
+                <span id="progreso">Pregunta 1 de 10</span>
+                <span id="tiempo-restante" style="color: #d32f2f; font-weight: bold; font-size: 18px;">05s</span>
+                <span id="puntuacion-actual">Puntos: 0</span>
+            </div>
+            <h2 id="pregunta-texto" class="fade-in">¿Pregunta?</h2>
+            <div id="opciones-contenedor" class="opciones fade-in"></div>
+            
+            <div id="justificacion-contenedor" class="justificacion oculta">
+                <h3 id="resultado-texto"></h3>
+                <p id="justificacion-texto"></p>
+                <button id="btn-siguiente" class="btn-negro">Siguiente Pregunta</button>
+            </div>
+        </div>
+
+        <div id="pantalla-resultados" class="pantalla oculta fade-in">
+            <h2>¡Cuestionario Completado!</h2>
+            <p id="mensaje-final"></p>
+            <p id="puntuacion-final" class="puntaje"></p>
+            <button id="btn-reiniciar" class="btn-rojo">Volver a intentar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

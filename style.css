@@ -1,0 +1,149 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    /* CAMBIO: Ruta apuntando a la raíz (carpeta public) */
+    background-image: url('public/fondo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4; 
+}
+
+/* Si por alguna razón la imagen no carga con '/fondo.jpg', 
+   intenta cambiarlo a './public/fondo.jpg' o simplemente 'fondo.jpg' 
+   dependiendo de cómo tengas tus carpetas estructuradas. */
+
+.contenedor-principal {
+    background-color: rgba(255, 255, 255, 0.98); 
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px;
+}
+
+.cabecera {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 5px solid #c8102e; 
+}
+
+.cabecera h1 { font-size: 24px; color: #c8102e; margin-bottom: 5px; }
+.cabecera p { font-size: 14px; color: #ccc; }
+
+.pantalla { padding: 30px; }
+.oculta { display: none !important; }
+
+.grupo-formulario { margin-bottom: 15px; }
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    transition: 0.2s;
+}
+
+.btn-rojo { background-color: #c8102e; color: white; }
+.btn-rojo:hover { background-color: #a00d24; }
+
+.btn-negro { background-color: #1a1a1a; color: white; margin-top: 15px; }
+.btn-negro:hover { background-color: #333; }
+
+.contenedor-barra {
+    width: 100%;
+    background-color: #eee;
+    height: 4px;
+    margin-bottom: 20px;
+}
+
+.barra-llenado {
+    height: 100%;
+    background-color: #c8102e;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.estado-quiz {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+#pregunta-texto { font-size: 18px; margin-bottom: 20px; color: #333; font-weight: bold; }
+
+.opciones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-opcion {
+    background-color: white;
+    color: #333;
+    border: 1px solid #ccc;
+    text-align: left;
+    font-weight: normal;
+}
+
+.btn-opcion:hover:not(:disabled) { border-color: #999; background-color: #f9f9f9; }
+
+.btn-opcion.correcto {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+    border: 2px solid #28a745 !important;
+    font-weight: bold;
+}
+
+.btn-opcion.incorrecto {
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+    border: 2px solid #dc3545 !important;
+    font-weight: bold;
+}
+
+.btn-opcion:disabled { cursor: not-allowed; }
+
+.justificacion {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+#resultado-texto { font-size: 18px; margin-bottom: 5px; }
+#justificacion-texto { font-size: 14px; color: #555; font-style: italic; }
+
+.puntaje { font-size: 24px; font-weight: bold; color: #c8102e; margin: 20px 0; }
+
+.fade-in { animation: fadeIn 0.4s ease-in; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
