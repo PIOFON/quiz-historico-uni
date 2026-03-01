@@ -68,7 +68,6 @@ let nombreUsuario = "";
 let facultadUsuario = "";
 let temporizador; 
 let tiempoRestante = 10;
-const URL_API = 'http://localhost:5000/api'; // Cambiar por URL de Render/Netlify en producción
 
 // Elementos del DOM
 const pantallaInicio = document.getElementById('pantalla-inicio');
@@ -221,12 +220,15 @@ async function mostrarResultados() {
 
 async function gestionarPuntajeYTabla() {
     try {
-        // En Netlify Functions, la ruta suele ser /.netlify/functions/score
-        const URL_API = '/.netlify/functions/score'; 
+        // ACTUALIZADO PARA VERCEL: Ruta directa a la carpeta api
+        const URL_API = '/api/score'; 
 
         // Enviar puntaje
         await fetch(URL_API, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
                 nombre: nombreUsuario,
                 facultad: facultadUsuario,
@@ -248,7 +250,7 @@ async function gestionarPuntajeYTabla() {
             </tr>
         `).join('');
     } catch (e) {
-        console.error("Error:", e);
+        console.error("Error al conectar con la base de datos:", e);
     }
 }
 
