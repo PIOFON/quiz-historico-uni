@@ -9,39 +9,37 @@ const ScoreSchema = new mongoose.Schema({
 
 const Score = mongoose.models.Score || mongoose.model('Score', ScoreSchema);
 
-exports.handler = async (event, context) => {
-    // Esto evita que la función se quede colgada esperando
-    context.callbackWaitsForEmptyEventLoop = false;
-
+// Vercel usa req (request) y res (response)
+module.exports = async (req, res) => {
     try {
         if (mongoose.connection.readyState !== 1) {
-            // El .trim() quita espacios, y el family: 4 obliga a usar IPv4 (soluciona el ENOTFOUND)
             await mongoose.connect(process.env.MONGO_URI.trim(), {
                 serverSelectionTimeoutMS: 5000, 
                 family: 4 
             });
         }
 
-        if (event.httpMethod === 'POST') {
-            const data = JSON.parse(event.body);
+        // POST: Guardar puntaje
+        if (req.method === 'POST') {
             const newScore = new Score({
-                nombre: data.nombre,
-                facultad: data.facultad,
-                puntos: data.puntos
+                nombre: req.body.nombre,
+                facultad: req.body.facultad,
+                puntos: req.body.puntos
             });
             await newScore.save();
-            return { statusCode: 201, body: JSON.stringify({ message: "Guardado" }) };
+            return res.status(201).json({ message: "Guardado" });
         }
 
-        if (event.httpMethod === 'GET') {
+        // GET: Obtener tabla
+        if (req.method === 'GET') {
             const topScores = await Score.find().sort({ puntos: -1, fecha: 1 }).limit(5);
-            return { statusCode: 200, body: JSON.stringify(topScores) };
+            return res.status(200).json(topScores);
         }
 
-        return { statusCode: 405, body: "Método no permitido" };
+        return res.status(405).json({ message: "Método no permitido" });
 
     } catch (error) {
         console.error("Error crítico de BD:", error);
-        return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+        return res.status(500).json({ error: error.message });
     }
 };
