@@ -85,7 +85,6 @@ const tiempoTexto = document.getElementById('tiempo-restante');
 const justificacionContenedor = document.getElementById('justificacion-contenedor');
 const resultadoTexto = document.getElementById('resultado-texto');
 const justificacionTexto = document.getElementById('justificacion-texto');
-const leaderboardBody = document.getElementById('leaderboard-body');
 
 // Listeners
 btnEmpezar.addEventListener('click', iniciarQuiz);
@@ -124,7 +123,6 @@ function iniciarTemporizador() {
 
 function actualizarRelojUI() {
     tiempoTexto.innerText = `${tiempoRestante < 10 ? '0' : ''}${tiempoRestante}s`;
-    // Cambio de color visual por presión
     tiempoTexto.style.color = tiempoRestante <= 3 ? "#ff0000" : "#d32f2f";
 }
 
@@ -174,8 +172,6 @@ function seleccionarRespuesta(botonSeleccionado, indexElegido, indexCorrecto) {
         resultadoTexto.innerText = "¡Respuesta Correcta!";
         resultadoTexto.style.color = "#28a745"; 
         
-        // --- LÓGICA COMPETITIVA: Puntos por tiempo ---
-        // Gracia de 3 segundos (TiempoRestante 10, 9, 8 dan 10 pts)
         let puntosGanados = (tiempoRestante >= 8) ? 10 : (tiempoRestante + 2);
         if (puntosGanados < 1) puntosGanados = 1;
 
@@ -214,16 +210,15 @@ async function mostrarResultados() {
     // Confeti final
     confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
 
-    // Enviar y actualizar Leaderboard desde MongoDB Atlas
-    await gestionarPuntajeYTabla();
+    // SOLO ENVÍA EL PUNTAJE, YA NO PIDE LA TABLA
+    await guardarPuntajeSilencioso();
 }
 
-async function gestionarPuntajeYTabla() {
+async function guardarPuntajeSilencioso() {
     try {
-        // ACTUALIZADO PARA VERCEL: Ruta directa a la carpeta api
         const URL_API = '/api/score'; 
 
-        // Enviar puntaje
+        // Enviar puntaje a MongoDB
         await fetch(URL_API, {
             method: 'POST',
             headers: {
@@ -235,22 +230,10 @@ async function gestionarPuntajeYTabla() {
                 puntos: puntaje
             })
         });
-
-        // Traer Top 5
-        const res = await fetch(URL_API);
-        const leaderboard = await res.json();
-
-        // Dibujar tabla
-        document.getElementById('leaderboard-body').innerHTML = leaderboard.map((j, i) => `
-            <tr>
-                <td>${i === 0 ? '👑' : i + 1}</td>
-                <td>${j.nombre}</td>
-                <td>${j.facultad}</td>
-                <td>${j.puntos}</td>
-            </tr>
-        `).join('');
+        
+        console.log("Datos guardados exitosamente en la base de datos.");
     } catch (e) {
-        console.error("Error al conectar con la base de datos:", e);
+        console.error("Error al guardar en la base de datos:", e);
     }
 }
 
