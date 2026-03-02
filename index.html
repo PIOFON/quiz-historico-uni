@@ -29,6 +29,23 @@
                 </select>
             </div>
             <button id="btn-empezar" class="btn-rojo">Comenzar Quiz</button>
+            
+            <div class="leaderboard-inicio" style="margin-top: 35px;">
+                <h3 style="text-align: center; color: #d32f2f; margin-bottom: 10px;">🏆 Top 5 - Mejores Puntajes</h3>
+                <table style="width: 100%; text-align: center; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f8f9fa; border-bottom: 2px solid #d32f2f;">
+                            <th style="padding: 10px;">#</th>
+                            <th style="padding: 10px;">Nombre</th>
+                            <th style="padding: 10px;">Facultad</th>
+                            <th style="padding: 10px;">Puntos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr><td colspan="4" style="padding: 15px;">Cargando posiciones...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="pantalla-quiz" class="pantalla oculta">
@@ -38,7 +55,7 @@
             
             <div class="estado-quiz">
                 <span id="progreso">Pregunta 1 de 10</span>
-                <span id="tiempo-restante" style="color: #d32f2f; font-weight: bold; font-size: 18px;">05s</span>
+                <span id="tiempo-restante" style="color: #d32f2f; font-weight: bold; font-size: 18px;">10s</span>
                 <span id="puntuacion-actual">Puntos: 0</span>
             </div>
             <h2 id="pregunta-texto" class="fade-in">¿Pregunta?</h2>
