@@ -91,6 +91,35 @@ btnEmpezar.addEventListener('click', iniciarQuiz);
 btnSiguiente.addEventListener('click', siguientePregunta);
 btnReiniciar.addEventListener('click', reiniciarQuiz);
 
+// --- NUEVO: Función para pedir el Top 5 apenas se abre la web ---
+async function cargarTablaAlInicio() {
+    try {
+        const URL_API = '/api/score';
+        const res = await fetch(URL_API);
+        const leaderboard = await res.json();
+
+        const tablaBody = document.getElementById('leaderboard-body');
+        if (tablaBody && leaderboard.length > 0) {
+            tablaBody.innerHTML = leaderboard.map((j, i) => `
+                <tr>
+                    <td>${i === 0 ? '👑' : i + 1}</td>
+                    <td>${j.nombre}</td>
+                    <td>${j.facultad}</td>
+                    <td>${j.puntos}</td>
+                </tr>
+            `).join('');
+        } else if (tablaBody) {
+            tablaBody.innerHTML = `<tr><td colspan="4">Aún no hay puntajes. ¡Sé el primero!</td></tr>`;
+        }
+    } catch (e) {
+        console.error("Error al cargar la tabla de inicio:", e);
+    }
+}
+
+// Hace que la tabla cargue sola al entrar a la página
+window.addEventListener('DOMContentLoaded', cargarTablaAlInicio);
+
+
 function iniciarQuiz() {
     nombreUsuario = document.getElementById('nombre').value.trim();
     facultadUsuario = document.getElementById('facultad').value;
@@ -210,30 +239,26 @@ async function mostrarResultados() {
     // Confeti final
     confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
 
-    // SOLO ENVÍA EL PUNTAJE, YA NO PIDE LA TABLA
+    // Guarda el puntaje en la base de datos de forma silenciosa
     await guardarPuntajeSilencioso();
 }
 
+// --- ACTUALIZADO: Ahora solo envía los datos a MongoDB ---
 async function guardarPuntajeSilencioso() {
     try {
         const URL_API = '/api/score'; 
-
-        // Enviar puntaje a MongoDB
         await fetch(URL_API, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 nombre: nombreUsuario,
                 facultad: facultadUsuario,
                 puntos: puntaje
             })
         });
-        
-        console.log("Datos guardados exitosamente en la base de datos.");
+        console.log("Puntaje enviado a la base de datos exitosamente.");
     } catch (e) {
-        console.error("Error al guardar en la base de datos:", e);
+        console.error("Error al enviar el puntaje:", e);
     }
 }
 
@@ -245,4 +270,7 @@ function reiniciarQuiz() {
     document.getElementById('nombre').value = '';
     document.getElementById('facultad').value = '';
     barraLlenado.style.width = "0%";
+    
+    // Al reiniciar, recargamos la tabla para que se vea el nuevo puntaje ingresado
+    cargarTablaAlInicio();
 }
